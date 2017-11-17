@@ -6,7 +6,6 @@ use Codeception\Lib\Interfaces\DependsOnModule;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use PackageVersions\Versions;
-use Stripe\Customer;
 
 /**
  * Class Stripe
@@ -99,11 +98,67 @@ class Stripe extends Module implements DependsOnModule
     }
 
     /**
+     * @param array $params
+     * @return \Stripe\Customer
+     */
+    public function haveStripeCustomer($params)
+    {
+        return \Stripe\Customer::create($params);
+    }
+
+    /**
+     * @param \Stripe\Customer $customer
+     * @return \Stripe\Customer
+     */
+    public function deleteStripeCustomer(\Stripe\Customer $customer)
+    {
+        return $customer->delete();
+    }
+
+    /**
+     * @param \Stripe\Source $source
+     * @return \Stripe\Source
+     */
+    public function detachStripeSource(\Stripe\Source  $source)
+    {
+        return $source->detach();
+    }
+
+    /**
+     * @param array $params
+     * @return \Stripe\Token
+     */
+    public function haveStripeToken($params)
+    {
+        return \Stripe\Token::create($params);
+    }
+
+    /**
+     * @param array $params
+     * @return \Stripe\Source
+     */
+    public function haveStripeSource($params)
+    {
+        return \Stripe\Source::create($params);
+    }
+
+    /**
+     * @param \Stripe\Customer $customer
+     * @param \Stripe\Source $source
+     * @return \Stripe\Customer
+     */
+    public function addStripeSourceToStripeCustomer(\Stripe\Customer $customer, \Stripe\Source $source)
+    {
+        $customer->sources->create(['source' => $source->id]);
+        return $customer;
+    }
+
+    /**
      * @param string $id
      */
-    public function seeCustomerWithId($id)
+    public function seeStripeCustomerWithId($id)
     {
-        $customer = Customer::retrieve($id);
+        $customer = \Stripe\Customer::retrieve($id);
         $this->assertEquals($id, $customer->id);
     }
 
@@ -111,8 +166,8 @@ class Stripe extends Module implements DependsOnModule
      * @param string $id
      * @return \Stripe\Customer
      */
-    public function grabCustomerById($id)
+    public function grabStripeCustomerById($id)
     {
-        return Customer::retrieve($id);
+        return \Stripe\Customer::retrieve($id);
     }
 }

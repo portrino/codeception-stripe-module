@@ -31,16 +31,52 @@ codecept build
 
 ### Methods
 
-#### seeCustomerWithId($table)
+#### haveStripeCustomer
 
 ```php
-  $I->seeCustomerWithId($id);
+  $I->haveStripeCustomer($params);
 ```
 
-#### grabCustomerById($table)
+#### deleteStripeCustomer
 
 ```php
-  $customer = $I->grabCustomerById($id);
+  $I->deleteStripeCustomer($params);
+```
+
+#### detachStripeSource
+
+```php
+  $I->detachStripeSource($params);
+```
+
+#### haveStripeToken
+
+```php
+  $I->haveStripeToken($params);
+```
+
+#### haveStripeSource
+
+```php
+  $I->haveStripeSource($params);
+```
+
+#### addStripeSourceToStripeCustomer
+
+```php
+  $I->addStripeSourceToStripeCustomer($customer, $source);
+```
+
+#### seeStripeCustomerWithId
+
+```php
+  $I->seeStripeCustomerWithId($id);
+```
+
+#### grabStripeCustomerById
+
+```php
+  $customer = $I->grabStripeCustomerById($id);
 ```
 
 ## Authors
