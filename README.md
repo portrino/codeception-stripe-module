@@ -31,13 +31,13 @@ codecept build
 
 ### Methods
 
-#### seeCustomerWithStripeId($table)
+#### seeCustomerWithId($table)
 
 ```php
   $I->seeCustomerWithId($id);
 ```
 
-#### grabCustomerByStripeCustomerId($table)
+#### grabCustomerById($table)
 
 ```php
   $customer = $I->grabCustomerById($id);
