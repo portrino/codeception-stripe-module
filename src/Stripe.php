@@ -101,7 +101,7 @@ class Stripe extends Module implements DependsOnModule
     /**
      * @param string $id
      */
-    public function seeCustomerWithStripeId($id)
+    public function seeCustomerWithId($id)
     {
         $customer = Customer::retrieve($id);
         $this->assertEquals($id, $customer->id);
@@ -111,7 +111,7 @@ class Stripe extends Module implements DependsOnModule
      * @param string $id
      * @return \Stripe\Customer
      */
-    public function grabCustomerByStripeCustomerId($id)
+    public function grabCustomerById($id)
     {
         return Customer::retrieve($id);
     }
