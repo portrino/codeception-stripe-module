@@ -16,11 +16,14 @@ composer require --dev portrino/codeception-stripe-module
 ```yml
 modules:
     enabled:
-        - Asserts
         - Stripe:
-            depends: Asserts
-            api_key: 'sk_test_IGvdODXxy1xXFviyAjWMiK5q'
+            api_key: 'sk_test_IGvdODXxy1xXFviyAjWMiK12'
             api_version: '2017-08-15'
+            connected_accounts:
+                account_1:
+                    api_key: 'sk_test_IGvdODXxy1xXFviyAjWMiK34'
+                account_2:
+                    api_key: 'sk_test_IGvdODXxy1xXFviyAjWMiK56'
  ```  
  
 Update codeception build
@@ -30,6 +33,22 @@ codecept build
 ```
 
 ### Methods
+
+#### amOnConnectedAccount
+
+```php
+  $I->amOnConnectedAccount($accountName);
+```
+
+Switch to an account which is defined in the config under `connected_accounts`. All further API request will go through this account.
+
+#### amOnDefaultAccount
+
+```php
+  $I->amOnDefaultAccount();
+```
+
+Switch (back) to default account. All further API request will go through this account.
 
 #### haveStripeCustomer
 
@@ -70,13 +89,19 @@ codecept build
 #### seeStripeCustomerWithId
 
 ```php
-  $I->seeStripeCustomerWithId($id);
+  $I->seeStripeCustomerWithId($customerId);
 ```
 
-#### grabStripeCustomerById
+#### grabStripeCustomerWithId
 
 ```php
-  $customer = $I->grabStripeCustomerById($id);
+  $customer = $I->grabStripeCustomerWithId($id);
+```
+
+#### seeStripeChargeWithId
+
+```php
+  $I->seeStripeChargeWithId($chargeId);
 ```
 
 ## Authors

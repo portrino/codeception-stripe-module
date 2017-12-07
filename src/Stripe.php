@@ -32,7 +32,8 @@ class Stripe extends Module implements DependsOnModule
      */
     protected $config = [
         'api_key' => '',
-        'api_version' => ''
+        'api_version' => '',
+        'connected_accounts' => []
     ];
 
     /**
@@ -65,20 +66,12 @@ class Stripe extends Module implements DependsOnModule
      */
     public function _depends()
     {
-        return [Asserts::class => $this->dependencyMessage];
-    }
-
-    /**
-     * @param Asserts $assert
-     * @codeCoverageIgnore
-     */
-    public function _inject(Asserts $asserts)
-    {
-        $this->asserts = $asserts;
+        return [];
     }
 
     /**
      * @param array $settings
+     * @throws \OutOfBoundsException
      */
     public function _beforeSuite($settings = [])
     {
@@ -95,6 +88,25 @@ class Stripe extends Module implements DependsOnModule
             'https://github.com/portrino/codeception-stripe-module'
         );
         $this->debugSection('Stripe App Info', \Stripe\Stripe::getAppInfo());
+    }
+
+    /**
+     * @param string $accountName
+     */
+    public function amOnConnectedAccount($accountName)
+    {
+        \Stripe\Stripe::setApiKey($this->config['connected_accounts'][$accountName]['api_key']);
+        $this->debugSection('Switched Stripe account', $accountName);
+        $this->debugSection('Set Stripe API Key', \Stripe\Stripe::getApiKey());
+    }
+
+    /**
+     */
+    public function amOnDefaultAccount()
+    {
+        \Stripe\Stripe::setApiKey($this->config['api_key']);
+        $this->debugSection('Switched to Stripe default account', '');
+        $this->debugSection('Set Stripe API Key', \Stripe\Stripe::getApiKey());
     }
 
     /**
@@ -117,7 +129,11 @@ class Stripe extends Module implements DependsOnModule
 
     /**
      * @param \Stripe\Source $source
+     *
      * @return \Stripe\Source
+     *
+     * @throws \Stripe\Error\Api
+     * @throws \Stripe\Error\InvalidRequest
      */
     public function detachStripeSource(\Stripe\Source  $source)
     {
@@ -147,27 +163,45 @@ class Stripe extends Module implements DependsOnModule
      * @param \Stripe\Source $source
      * @return \Stripe\Customer
      */
-    public function addStripeSourceToStripeCustomer(\Stripe\Customer $customer, \Stripe\Source $source)
+    public function addStripeSourceToStripeCustomer(\Stripe\Customer $customer, Source $source)
     {
         $customer->sources->create(['source' => $source->id]);
         return $customer;
     }
 
     /**
-     * @param string $id
+     * @param string $customerId
      */
-    public function seeStripeCustomerWithId($id)
+    public function seeStripeCustomerWithId($customerId)
     {
-        $customer = \Stripe\Customer::retrieve($id);
-        $this->assertEquals($id, $customer->id);
+        $customer = \Stripe\Customer::retrieve($customerId);
+        $this->assertEquals($customerId, $customer->id);
     }
 
     /**
-     * @param string $id
+     * @param string $customerId
      * @return \Stripe\Customer
      */
-    public function grabStripeCustomerById($id)
+    public function grabStripeCustomerWithId($customerId)
     {
-        return \Stripe\Customer::retrieve($id);
+        return \Stripe\Customer::retrieve($customerId);
+    }
+
+    /**
+     * @param string $chargeId
+     */
+    public function seeStripeChargeWithId($chargeId)
+    {
+        $charge = \Stripe\Charge::retrieve($chargeId);
+        $this->assertEquals($chargeId, $charge->id);
+    }
+
+    /**
+     * @param $chargeId
+     * @return \Stripe\Charge
+     */
+    public function grabStripeChargeWithId($chargeId)
+    {
+        return \Stripe\Charge::retrieve($chargeId);
     }
 }
