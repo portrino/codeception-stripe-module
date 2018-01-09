@@ -163,7 +163,7 @@ class Stripe extends Module implements DependsOnModule
      * @param \Stripe\Source $source
      * @return \Stripe\Customer
      */
-    public function addStripeSourceToStripeCustomer(\Stripe\Customer $customer, Source $source)
+    public function addStripeSourceToStripeCustomer(\Stripe\Customer $customer, \Stripe\Source $source)
     {
         $customer->sources->create(['source' => $source->id]);
         return $customer;
