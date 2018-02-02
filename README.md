@@ -104,6 +104,12 @@ Switch (back) to default account. All further API request will go through this a
   $I->seeStripeChargeWithId($chargeId);
 ```
 
+#### seeStripeTransferWithId
+
+```php
+  $I->seeStripeTransferWithId($transferId);
+```
+
 ## Authors
 
 ![](https://avatars0.githubusercontent.com/u/726519?s=40&v=4)

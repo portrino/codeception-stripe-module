@@ -204,4 +204,22 @@ class Stripe extends Module implements DependsOnModule
     {
         return \Stripe\Charge::retrieve($chargeId);
     }
+
+    /**
+     * @param string $transferId
+     */
+    public function seeStripeTransferWithId($transferId)
+    {
+        $transfer = \Stripe\Transfer::retrieve($transferId);
+        $this->assertEquals($transferId, $transfer->id);
+    }
+
+    /**
+     * @param $transferId
+     * @return \Stripe\Transfer
+     */
+    public function grabStripeTransferWithId($transferId)
+    {
+        return \Stripe\Transfer::retrieve($transferId);
+    }
 }
